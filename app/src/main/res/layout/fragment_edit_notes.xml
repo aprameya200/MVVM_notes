@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".ui.Fragments.EditNotesFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <EditText
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/background"
+            android:ems="10"
+            android:fontFamily="@font/regular"
+            android:hint="Title..."
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="7dp"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/background"
+            android:ems="10"
+            android:fontFamily="@font/regular"
+            android:hint="Subtitle..."
+            android:inputType="textPersonName"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="7dp"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/yellowTickBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/yellow"
+            android:padding="0dp"
+            app:fabCustomSize="30dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toEndOf="@+id/greenTickBtn"
+            app:layout_constraintTop_toBottomOf="@+id/subtitle" />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/greenTickBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:backgroundTint="@color/green"
+            android:layout_marginTop="10dp"
+            app:fabCustomSize="30dp"
+            app:layout_constraintStart_toEndOf="@+id/redTickBtn"
+            app:layout_constraintTop_toBottomOf="@+id/subtitle"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/redTickBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:backgroundTint="@color/red"
+            app:fabCustomSize="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/subtitle"></com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+        <EditText
+            android:id="@+id/notes"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/background"
+            android:ems="10"
+            android:lines="30"
+            android:fontFamily="@font/regular"
+            android:hint="Notes..."
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="7dp"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/redTickBtn" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/editNotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:backgroundTint="@color/red"
+            android:layout_margin="26dp"
+            android:src="@drawable/baseline_refresh_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</FrameLayout>

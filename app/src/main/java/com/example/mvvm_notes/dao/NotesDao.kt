@@ -10,6 +10,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.mvvm_notes.entity.Notes
+import com.example.mvvm_notes.enums.Priority
 
 @Dao
 interface NotesDao {
@@ -25,5 +26,14 @@ interface NotesDao {
 
     @Update
     fun updateNotes(notes: Notes)
+
+    @Query("SELECT * FROM notes WHERE priority = :high")
+    fun getHighPriorityNotes(high: Priority) : LiveData<List<Notes>>
+
+    @Query("SELECT * FROM notes WHERE priority = :medium")
+    fun getMediumPriorityNotes(medium: Priority) : LiveData<List<Notes>>
+
+    @Query("SELECT * FROM notes WHERE priority = :low")
+    fun getLowPriorityNotes(low: Priority) : LiveData<List<Notes>>
 
 }

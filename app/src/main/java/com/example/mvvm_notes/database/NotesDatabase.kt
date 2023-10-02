@@ -5,7 +5,7 @@ import androidx.room.*
 import com.example.mvvm_notes.dao.NotesDao
 import com.example.mvvm_notes.entity.Notes
 
-@Database(entities = [Notes::class], version = 1)
+@Database(entities = [Notes::class], version = 2)
 @TypeConverters(Notes.PriorityConverter::class) // Add your TypeConverter here
 abstract class NotesDatabase : RoomDatabase(){
 

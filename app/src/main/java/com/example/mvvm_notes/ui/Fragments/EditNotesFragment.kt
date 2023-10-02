@@ -3,10 +3,8 @@ package com.example.mvvm_notes.ui.Fragments
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -39,6 +37,8 @@ class EditNotesFragment : Fragment() {
 
         binding = FragmentEditNotesBinding.inflate(layoutInflater, container, false)
 
+        setHasOptionsMenu(true)
+
         binding.title.setText(notes.data.getTitle())
         binding.subtitle.setText(notes.data.getSubtitle())
         binding.notes.setText(notes.data.getNotes())
@@ -49,11 +49,23 @@ class EditNotesFragment : Fragment() {
             Priority.LOW -> binding.greenTickBtn.setImageResource(R.drawable.baseline_done_24)
         }
 
-        binding.redTickBtn.setOnClickListener { updatePriority(Priority.HIGH,binding.redTickBtn) }
-        binding.greenTickBtn.setOnClickListener { updatePriority(Priority.LOW,binding.greenTickBtn) }
-        binding.yellowTickBtn.setOnClickListener { updatePriority(Priority.MEDIUM,binding.yellowTickBtn) }
+        binding.redTickBtn.setOnClickListener { updatePriority(Priority.HIGH, binding.redTickBtn) }
+        binding.greenTickBtn.setOnClickListener {
+            updatePriority(
+                Priority.LOW,
+                binding.greenTickBtn
+            )
+        }
+        binding.yellowTickBtn.setOnClickListener {
+            updatePriority(
+                Priority.MEDIUM,
+                binding.yellowTickBtn
+            )
+        }
 
-        binding.editNotes.setOnClickListener { updateNotes(it)}
+        binding.editNotes.setOnClickListener { updateNotes(it) }
+
+
 
         return binding.root
     }
@@ -70,24 +82,43 @@ class EditNotesFragment : Fragment() {
             )
         )
 
-        Toast.makeText(context,"Note Updated Succesfully",Toast.LENGTH_LONG)
+        Toast.makeText(context, "Note Updated Succesfully", Toast.LENGTH_LONG)
 
         Navigation.findNavController(it!!).navigate(R.id.action_editNotesFragment_to_homeFragment)
     }
 
-    fun updatePriority(priority:  Priority, btn: FloatingActionButton){
+    fun updatePriority(priority: Priority, btn: FloatingActionButton) {
 
         this.priority = priority
 
-        var btns = listOf(binding.redTickBtn,binding.greenTickBtn,binding.yellowTickBtn)
+        var btns = listOf(binding.redTickBtn, binding.greenTickBtn, binding.yellowTickBtn)
 
         //if btn selected
-        btns.forEach{button ->
+        btns.forEach { button ->
             button.setImageResource(if (button == btn) R.drawable.baseline_done_24 else 0)
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.delete_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        var id = notes.data.getId()
+
+        if (item.itemId == R.id.deleteIcon) {
+
+            if (id != null) {
+                viewModel.deleteNotes(id)
+            }
+        }
+
+        Toast.makeText(context, "Note Deleted Succesfully", Toast.LENGTH_LONG)
+
+        return super.onOptionsItemSelected(item)
+    }
 
 
 }

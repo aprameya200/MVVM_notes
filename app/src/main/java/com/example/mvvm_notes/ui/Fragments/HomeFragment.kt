@@ -23,11 +23,6 @@ class HomeFragment : Fragment() {
 
     var notesPriority: Priority? = null
 
-    var toggledHigh = false
-    var toggledMid = false
-    var toggledLow = false
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -41,12 +36,11 @@ class HomeFragment : Fragment() {
 
     fun initUI() {
 
-        displayAllotes()
+        displayNotes(Priority.ALL)
         binding.btnAddNotes.setOnClickListener {
             Navigation.findNavController(it)
                 .navigate(R.id.action_homeFragment_to_createNoteFragment)
         }
-
         setToggleListeners()
     }
 
@@ -60,18 +54,19 @@ class HomeFragment : Fragment() {
                     binding.highTag -> Priority.HIGH
                     binding.midTag -> Priority.MEDIUM
                     binding.lowTag -> Priority.LOW
-                    else -> Priority.LOW
+                    else -> Priority.ALL
                 }
-                toggleFilter(priority)
+                displayNotes(viewModel.toggleFilter(priority,notesPriority!!))
             }
         }
     }
 
-    fun displayAllotes() {
-        viewModel.getNotes().observe(viewLifecycleOwner) { allNotes ->
+    fun displayNotes(priority: Priority) {
+        viewModel.getNotesByPriority(priority).observe(viewLifecycleOwner) { allNotes ->
             inflateLayout(allNotes)
         }
-        notesPriority = null
+
+        notesPriority = priority
     }
 
     fun inflateLayout(notes: List<Notes>) {
@@ -79,19 +74,6 @@ class HomeFragment : Fragment() {
         binding.rcvAllNotes.adapter = NotesAdapter(requireContext(), notes)
     }
 
-    fun toggleFilter(priority: Priority) {
 
-        if (notesPriority == priority) {
-            displayAllotes()
-            notesPriority = null
-
-        } else {
-            viewModel.getNotesByPriority(priority).observe(viewLifecycleOwner) {
-                inflateLayout(it)
-            }
-            notesPriority = priority
-        }
-
-    }
 
 }

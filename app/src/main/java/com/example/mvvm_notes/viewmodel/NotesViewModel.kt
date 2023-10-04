@@ -12,12 +12,16 @@ class NotesViewModel(application: Application) : AndroidViewModel(application) {
 
     val repository: NotesRepository
 
+
+
     init { //runs when the Class is first initialized
         val dao = NotesDatabase.getDatabase(application).getNotesDao()
         repository = NotesRepository(dao)
     }
 
     fun getNotes(): LiveData<List<Notes>> {
+
+
         return repository.getNotes()
     }
 
@@ -38,7 +42,18 @@ class NotesViewModel(application: Application) : AndroidViewModel(application) {
             Priority.HIGH -> return repository.getHighPriorityNotes(priority)
             Priority.MEDIUM -> return repository.getMediumPriorityNotes(priority)
             Priority.LOW -> return repository.getLowPeiorityNotes(priority)
+            Priority.ALL -> return repository.getNotes()
         }
+    }
+
+    fun toggleFilter(priority: Priority,notesPriority: Priority): Priority {
+
+        if (notesPriority == priority) {
+            return Priority.ALL
+        } else {
+            return priority
+        }
+
     }
 
     fun highPriorityNotes(priority: Priority): LiveData<List<Notes>>{

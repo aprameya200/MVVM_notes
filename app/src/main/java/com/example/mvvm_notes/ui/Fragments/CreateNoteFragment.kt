@@ -22,7 +22,7 @@ import java.util.Date
 class CreateNoteFragment : Fragment() {
 
     lateinit var binding: FragmentCreateNoteBinding
-    var notePriority: Priority = Priority.HIGH
+    var notePriority: Priority = Priority.LOW
 
     val viewModel: NotesViewModel by viewModels()
 

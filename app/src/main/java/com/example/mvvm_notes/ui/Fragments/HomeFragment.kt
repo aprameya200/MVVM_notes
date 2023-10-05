@@ -1,6 +1,7 @@
 package com.example.mvvm_notes.ui.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +22,7 @@ class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     val viewModel: NotesViewModel by viewModels()
 
-    var notesPriority: Priority? = null
+    var notesPriority: Priority = Priority.ALL
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -36,12 +37,17 @@ class HomeFragment : Fragment() {
 
     fun initUI() {
 
-        displayNotes(Priority.ALL)
+        viewModel.notesLD.observe(viewLifecycleOwner){
+            inflateLayout(it)
+        }
+
+        setToggleListeners()
+
         binding.btnAddNotes.setOnClickListener {
             Navigation.findNavController(it)
                 .navigate(R.id.action_homeFragment_to_createNoteFragment)
         }
-        setToggleListeners()
+
     }
 
     private fun setToggleListeners() {
@@ -50,30 +56,24 @@ class HomeFragment : Fragment() {
 
         buttons.forEach { tag ->
             tag.setOnClickListener {
+
                 var priority = when (tag) {
                     binding.highTag -> Priority.HIGH
                     binding.midTag -> Priority.MEDIUM
                     binding.lowTag -> Priority.LOW
                     else -> Priority.ALL
                 }
-                displayNotes(viewModel.toggleFilter(priority,notesPriority!!))
+
+
+                notesPriority = viewModel.toggleFilter(priority,notesPriority)
             }
         }
     }
 
-    fun displayNotes(priority: Priority) {
-        viewModel.getNotesByPriority(priority).observe(viewLifecycleOwner) { allNotes ->
-            inflateLayout(allNotes)
-        }
-
-        notesPriority = priority
-    }
 
     fun inflateLayout(notes: List<Notes>) {
         binding.rcvAllNotes.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rcvAllNotes.adapter = NotesAdapter(requireContext(), notes)
     }
-
-
 
 }

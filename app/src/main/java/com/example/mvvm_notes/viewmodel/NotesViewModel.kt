@@ -3,6 +3,7 @@ package com.example.mvvm_notes.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.mvvm_notes.Repository.NotesRepository
 import com.example.mvvm_notes.database.NotesDatabase
 import com.example.mvvm_notes.entity.Notes
@@ -11,60 +12,65 @@ import com.example.mvvm_notes.enums.Priority
 class NotesViewModel(application: Application) : AndroidViewModel(application) {
 
     val repository: NotesRepository
+    var notesLD = MutableLiveData<List<Notes>>()
 
-
+    var prio = Priority.ALL
 
     init { //runs when the Class is first initialized
         val dao = NotesDatabase.getDatabase(application).getNotesDao()
         repository = NotesRepository(dao)
+// Initialize with an empty list
+        val notesLiveData = getNotesByPriority(prio)
+
+        //observ livedata
+        notesLiveData.observeForever { newNotesList ->
+            // Update your LiveData with the new value
+            notesLD.postValue(newNotesList)
+        }
+
     }
 
-    fun getNotes(): LiveData<List<Notes>> {
-
-
-        return repository.getNotes()
-    }
-
-    fun insertNotes(notes: Notes){
+    fun insertNotes(notes: Notes) {
         repository.insertNotes(notes)
     }
 
-    fun deleteNotes(id : Int){
+    fun deleteNotes(id: Int) {
         repository.deleteNotes(id)
     }
 
-    fun updateNotes(notes: Notes){
+    fun updateNotes(notes: Notes) {
         repository.updateNotes(notes)
     }
 
-    fun getNotesByPriority(priority: Priority): LiveData<List<Notes>>{
+    fun getNotesByPriority(priority: Priority): LiveData<List<Notes>> {
+//        updateNotesList(repository.getNotes())
+
         when (priority) {
             Priority.HIGH -> return repository.getHighPriorityNotes(priority)
             Priority.MEDIUM -> return repository.getMediumPriorityNotes(priority)
             Priority.LOW -> return repository.getLowPeiorityNotes(priority)
             Priority.ALL -> return repository.getNotes()
         }
+
     }
 
-    fun toggleFilter(priority: Priority,notesPriority: Priority): Priority {
+    fun toggleFilter(priority: Priority, notesPriority: Priority) : Priority {
 
         if (notesPriority == priority) {
-            return Priority.ALL
+            prio = Priority.ALL
         } else {
-            return priority
+            prio = priority
         }
 
+        val notesLiveData = getNotesByPriority(prio)
+
+        //observ livedata
+        notesLiveData.observeForever { newNotesList ->
+            // Update your LiveData with the new value
+            notesLD.postValue(newNotesList)
+        }
+
+        return prio
     }
 
-    fun highPriorityNotes(priority: Priority): LiveData<List<Notes>>{
-        return repository.getHighPriorityNotes(priority)
-    }
-
-    fun mediumPriorityNotes(priority: Priority): LiveData<List<Notes>>{
-        return repository.getMediumPriorityNotes(priority)
-    }
-
-    fun lowPriorityNotes(priority: Priority): LiveData<List<Notes>>{
-        return repository.getLowPeiorityNotes(priority)
-    }
 }
